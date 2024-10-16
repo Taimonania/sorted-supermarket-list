@@ -1,0 +1,17 @@
+meta {
+  name: Hello, {name}
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://127.0.0.1:3000/stringify
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Hannah"
+  }
+}
