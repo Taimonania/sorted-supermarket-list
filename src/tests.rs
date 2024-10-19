@@ -14,8 +14,8 @@ async fn it_creates_an_item() {
     let app = app(db);
 
     let new_item = CreateItem {
-        name: "Item 1".to_string(),
-        description: "Description 1".to_string(),
+        product: "Item 1".to_string(),
+        quantity: "Description 1".to_string(),
     };
 
     let response = app
@@ -39,8 +39,8 @@ async fn it_creates_an_item() {
     // println!("{:?}", body_string);
     println!("Returned body: {:?}", body_string);
     assert!(body["id"].is_string());
-    assert_eq!(body["name"], new_item.name);
-    assert_eq!(body["description"], new_item.description);
+    assert_eq!(body["name"], new_item.product);
+    assert_eq!(body["description"], new_item.quantity);
 
     // Check that ID is of type Uuid
     let id_str = body["id"].as_str().unwrap();
@@ -52,13 +52,13 @@ async fn it_returns_all_items() {
     let db = Db::default();
     let new_item_1 = Item {
         id: Uuid::new_v4(),
-        name: "Item 1".to_string(),
-        description: "Description 1".to_string(),
+        product: "Item 1".to_string(),
+        quantity: "Description 1".to_string(),
     };
     let new_item_2 = Item {
         id: Uuid::new_v4(),
-        name: "Item 2".to_string(),
-        description: "Description 2".to_string(),
+        product: "Item 2".to_string(),
+        quantity: "Description 2".to_string(),
     };
 
     db.write()
@@ -94,11 +94,11 @@ async fn it_returns_all_items() {
     items.sort_by(|a, b| a["name"].as_str().unwrap().cmp(b["name"].as_str().unwrap()));
 
     assert_eq!(body[0]["id"], new_item_1.id.to_string());
-    assert_eq!(body[0]["name"], new_item_1.name);
-    assert_eq!(body[0]["description"], new_item_1.description);
+    assert_eq!(body[0]["name"], new_item_1.product);
+    assert_eq!(body[0]["description"], new_item_1.quantity);
     assert_eq!(body[1]["id"], new_item_2.id.to_string());
-    assert_eq!(body[1]["name"], new_item_2.name);
-    assert_eq!(body[1]["description"], new_item_2.description);
+    assert_eq!(body[1]["name"], new_item_2.product);
+    assert_eq!(body[1]["description"], new_item_2.quantity);
 }
 
 #[tokio::test]
@@ -107,8 +107,8 @@ async fn it_fails_updating_nonexistent_item() {
     let app = app(db);
 
     let update_item = UpdateItem {
-        name: Some("Item 1".to_string()),
-        description: Some("Description 1".to_string()),
+        product: Some("Item 1".to_string()),
+        quantity: Some("Description 1".to_string()),
     };
 
     let response = app

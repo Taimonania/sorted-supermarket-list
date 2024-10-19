@@ -20,8 +20,8 @@ pub async fn create_item(
     let mut db = db.write().unwrap();
     let item = Item {
         id: Uuid::new_v4(),
-        name: payload.name,
-        description: payload.description,
+        product: payload.product,
+        quantity: payload.quantity,
     };
     db.insert(item.id, item.clone());
     (StatusCode::CREATED, Json(item))
@@ -31,6 +31,14 @@ pub async fn read_items(State(db): State<Db>) -> impl IntoResponse {
     let db = db.read().unwrap();
     let items: Vec<Item> = db.values().cloned().collect();
     Json(items)
+}
+
+pub async fn read_item(
+    Path(id): Path<Uuid>,
+    State(db): State<Db>,
+) -> Result<impl IntoResponse, StatusCode> {
+    let item = db.read().unwrap().get(&id).cloned().ok_or(StatusCode::NOT_FOUND)?;
+    Ok(Json(item))
 }
 
 pub async fn update_item(
@@ -45,12 +53,12 @@ pub async fn update_item(
         .cloned()
         .ok_or(StatusCode::NOT_FOUND)?;
 
-    if let Some(name) = payload.name {
-        item.name = name;
+    if let Some(name) = payload.product {
+        item.product = name;
     }
 
-    if let Some(description) = payload.description {
-        item.description = description;
+    if let Some(description) = payload.quantity {
+        item.quantity = description;
     }
 
     db.write().unwrap().insert(item.id, item.clone());
