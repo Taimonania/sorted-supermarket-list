@@ -1,0 +1,18 @@
+meta {
+  name: List Items
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:3000/items
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Banane",
+    "description": "10 Stück"
+  }
+}

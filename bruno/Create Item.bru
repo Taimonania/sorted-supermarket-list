@@ -1,0 +1,18 @@
+meta {
+  name: Create Item
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:3000/items
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Banane",
+    "description": "10 Stück"
+  }
+}
