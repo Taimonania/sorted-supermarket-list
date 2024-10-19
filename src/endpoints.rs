@@ -5,7 +5,7 @@ use crate::{
 use axum::{
     extract::{Json, Path, State},
     http::StatusCode,
-    response::IntoResponse,
+    response::{Html, IntoResponse},
 };
 use uuid::Uuid;
 
@@ -33,11 +33,31 @@ pub async fn read_items(State(db): State<Db>) -> impl IntoResponse {
     Json(items)
 }
 
+pub async fn read_items_html(State(db): State<Db>) -> impl IntoResponse {
+    let db = db.read().unwrap();
+    let items: Vec<Item> = db.values().cloned().collect();
+    let mut html_string = String::from("<html><body><h1>Items</h1><ul>");
+    for item in items {
+        html_string.push_str(&format!(
+            "<li><strong>{}</strong>: {}</li>",
+            item.product, item.quantity
+        ));
+    }
+    html_string.push_str("</ul></body></html>");
+
+    Html(html_string)
+}
+
 pub async fn read_item(
     Path(id): Path<Uuid>,
     State(db): State<Db>,
 ) -> Result<impl IntoResponse, StatusCode> {
-    let item = db.read().unwrap().get(&id).cloned().ok_or(StatusCode::NOT_FOUND)?;
+    let item = db
+        .read()
+        .unwrap()
+        .get(&id)
+        .cloned()
+        .ok_or(StatusCode::NOT_FOUND)?;
     Ok(Json(item))
 }
 

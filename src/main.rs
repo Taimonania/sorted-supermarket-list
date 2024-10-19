@@ -2,7 +2,7 @@ use axum::{
     routing::{get, patch},
     Router,
 };
-use endpoints::{create_item, delete_item, read_item, read_items, update_item};
+use endpoints::{create_item, delete_item, read_item, read_items, read_items_html, update_item};
 use models::Item;
 use std::{
     collections::HashMap,
@@ -37,7 +37,7 @@ async fn main() {
 fn app(db: Db) -> Router {
     Router::new()
         .route("/", get(endpoints::hello_world))
-        .route("/items", get(read_items).post(create_item))
+        .route("/items", get(read_items_html).post(create_item))
         .route(
             "/items/{id}",
             patch(update_item).delete(delete_item).get(read_item),
