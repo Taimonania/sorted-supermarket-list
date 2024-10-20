@@ -1,0 +1,4 @@
+{
+  "rust-analyzer.linkedProjects": ["server/Cargo.toml"],
+  "deno.enable": true
+}
