@@ -42,7 +42,7 @@ async fn main() {
 
     let app = app(db);
 
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:3001")
         .await
         .unwrap();
     println!("Listening on {}", listener.local_addr().unwrap());
@@ -53,7 +53,7 @@ async fn main() {
 fn app(db: Db) -> Router {
     Router::new()
         .route("/", get(endpoints::hello_world))
-        .route("/items", get(read_items_html).post(create_item))
+        .route("/items", get(read_items).post(create_item))
         .route(
             "/items/{id}",
             patch(update_item).delete(delete_item).get(read_item),
